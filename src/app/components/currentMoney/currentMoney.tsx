@@ -8,7 +8,7 @@ function CurrentMoney() {
   const [playerMoney, setPlayerMoney] = useState(useAppSelector(state => state.playerMoney.money));
 
     return (
-      <div className="items-center justify-between p-10 bg-gray-700 border-solid rounded">
+      <div className="items-center justify-between py-2 px-6 bg-white border-solid border-4 border-yellow-600 rounded-full absolute m-10">
         {playerMoney}
       </div>
     );

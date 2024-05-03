@@ -1,12 +1,14 @@
 "use client";
 
-import CurrentMoney from "../currentMoney/currentMoney";
+import CurrentMoney from "../CurrentMoney/currentMoney";
 import StoreProvider from "../../StoreProvider";
+import Navbar from "../Navbar/navbar";
 
 function Navigation() {
     return (
       <>
         <StoreProvider>
+            <Navbar />
             <CurrentMoney />
         </StoreProvider>
       </>
