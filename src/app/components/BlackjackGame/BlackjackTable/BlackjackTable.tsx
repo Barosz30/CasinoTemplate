@@ -2,7 +2,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-function BlackjackTable() {
+type HandleWinFunction = () => void;
+type HandleLoseFunction = () => void;
+type HandleDrawFunction = () => void;
+
+function BlackjackTable({ handleWin, handleLose, handleDraw }: { handleWin: HandleWinFunction, handleLose: HandleLoseFunction, handleDraw: HandleDrawFunction}) {
+
 
     type Suit = 'Hearts' | 'Diamonds' | 'Clubs' | 'Spades';
     type Rank = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K' | 'A';
@@ -34,7 +39,6 @@ function BlackjackTable() {
     const [deck, setDeck] = useState<Card[]>(generateDeck());
     const [playerCards, setPlayerCards] = useState<Card[]>([])
     const [hostCards, setHostCards] = useState<Card[]>([])
-    const [playerScore, setPlayerScore] = useState<number>(0);
 
     
 
@@ -94,12 +98,95 @@ function BlackjackTable() {
     console.log("host cards");
     console.log(hostCards);
 
-    console.log(deck.length);
+    const CountPoints = (hand: Card[]) => {
+        let result = 0;
+        let aceCount = 0;
+        
+        for (const card of hand) {
+            switch (card.rank) {
+                case "2":
+                    result += 2;
+                    break;
+                case "3":
+                    result += 3;
+                    break;
+                case "4":
+                    result += 4;
+                    break;
+                case "5":
+                    result += 5;
+                    break;
+                case "6":
+                    result += 6;
+                    break;
+                case "7":
+                    result += 7;
+                    break;
+                case "8":
+                    result += 8;
+                    break;
+                case "9":
+                    result += 9;
+                    break;
+                case "10":
+                case "J":
+                case "Q":
+                case "K":
+                    result += 10;
+                    break;
+                case "A":
+                    result += 11;
+                    aceCount++;
+                    break;
+                default:
+                    console.log("Unknown card rank: " + card.rank);
+                    break;
+            }
+        }
+        while (result > 21 && aceCount > 0) {
+            result -= 10;
+            aceCount--;
+        }
+        return result;
+    }
+
+    const playerScore = CountPoints(playerCards);
+    if (playerScore > 21) 
+        { 
+            handleLose() 
+        }
+    const hostScore = CountPoints(hostCards);
+
+
+    const playerStopDrawing = () => {
+        if (playerScore > hostScore) {
+            handleWin();
+        } else if (playerScore === hostScore) {
+            handleDraw();
+        } else {
+            handleLose();
+        }
+    }
 
 
 
     return (
-        <div>Tutaj jest gra</div>
+        <>
+            <div>{hostScore}</div>
+            <div>{playerScore}</div>
+            <button 
+                className="py-2 px-6 bg-cyan-400 border-solid border-4 border-blue-600 rounded-full m-10"
+                onClick={playerDrawCard}
+            >
+                Draw card
+            </button>
+            <button 
+                className="py-2 px-6 bg-cyan-400 border-solid border-4 border-blue-600 rounded-full m-10"
+                onClick={playerStopDrawing}
+            >
+                Enough
+            </button>
+        </>
     );
   }
 
