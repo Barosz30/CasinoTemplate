@@ -2,12 +2,15 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-type HandleWinFunction = () => void;
-type HandleLoseFunction = () => void;
-type HandleDrawFunction = () => void;
 
-function BlackjackTable({ handleWin, handleLose, handleDraw }: { handleWin: HandleWinFunction, handleLose: HandleLoseFunction, handleDraw: HandleDrawFunction}) {
+interface BlackjackTableProps {
+    handleWin: () => void;
+    handleLose: () => void;
+    handleDraw: () => void;
+    isGameOver: boolean;
+}
 
+function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: BlackjackTableProps) {
 
     type Suit = 'Hearts' | 'Diamonds' | 'Clubs' | 'Spades';
     type Rank = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K' | 'A';
@@ -15,7 +18,7 @@ function BlackjackTable({ handleWin, handleLose, handleDraw }: { handleWin: Hand
     interface Card {
         rank: Rank;
         suit: Suit;
-    }
+    }``
 
     const ranks: Rank[] = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
     const suits: Suit[] = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
@@ -174,18 +177,22 @@ function BlackjackTable({ handleWin, handleLose, handleDraw }: { handleWin: Hand
         <>
             <div>{hostScore}</div>
             <div>{playerScore}</div>
-            <button 
-                className="py-2 px-6 bg-cyan-400 border-solid border-4 border-blue-600 rounded-full m-10"
-                onClick={playerDrawCard}
-            >
-                Draw card
-            </button>
-            <button 
-                className="py-2 px-6 bg-cyan-400 border-solid border-4 border-blue-600 rounded-full m-10"
-                onClick={playerStopDrawing}
-            >
-                Enough
-            </button>
+            {!isGameOver &&
+            <>
+                <button 
+                    className="py-2 px-6 bg-cyan-400 border-solid border-4 border-blue-600 rounded-full m-10"
+                    onClick={playerDrawCard}
+                >
+                    Draw card
+                </button>
+                <button 
+                    className="py-2 px-6 bg-cyan-400 border-solid border-4 border-blue-600 rounded-full m-10"
+                    onClick={playerStopDrawing}
+                >
+                    Enough
+                </button>
+            </>
+            }
         </>
     );
   }
