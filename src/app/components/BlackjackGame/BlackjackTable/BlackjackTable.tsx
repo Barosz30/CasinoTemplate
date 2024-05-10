@@ -42,8 +42,9 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
     const [deck, setDeck] = useState<Card[]>(generateDeck());
     const [playerCards, setPlayerCards] = useState<Card[]>([])
     const [hostCards, setHostCards] = useState<Card[]>([])
-
-    
+    const [playerScore, setPlayerScore] = useState<number>(0);
+    const [hostScore, setHostScore] = useState<number>(0);
+    const [hostTurn, setHostTurn] = useState<boolean>(false);
 
     const playerDrawCard = () => {
         if (deck.length === 0) {
@@ -63,6 +64,8 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
             const updatedPlayerCards = [...prevPlayerCards, drawnCard];
             return updatedPlayerCards;
         });
+
+        // setPlayerScore(CountPoints(playerCards));
     };
     
     const hostDrawCard = () => {
@@ -83,6 +86,8 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
             const updatedHostCards = [...prevHostCards, drawnCard];
             return updatedHostCards;
         });
+
+        // setHostScore(CountPoints(hostCards));
     };
 
 
@@ -94,12 +99,22 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
         if (hostCards.length < 2) {
             hostDrawCard();
         }
+
+        setHostScore(CountPoints(hostCards));
+        setPlayerScore(CountPoints(playerCards));
     }, [playerCards, hostCards]);
 
-    console.log("player cards");
-    console.log(playerCards);
-    console.log("host cards");
-    console.log(hostCards);
+    useEffect(() => {
+        const drawCardAndUpdateScore = async () => {
+            if (hostScore < 17 && hostTurn) {
+                await hostDrawCard(); 
+                await setHostScore(CountPoints(hostCards));
+            }
+        };
+    
+        drawCardAndUpdateScore();
+
+    }, [hostTurn === true, hostCards]);
 
     const CountPoints = (hand: Card[]) => {
         let result = 0;
@@ -153,15 +168,20 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
         return result;
     }
 
-    const playerScore = CountPoints(playerCards);
     if (playerScore > 21) 
         { 
             handleLose() 
         }
-    const hostScore = CountPoints(hostCards);
 
 
-    const playerStopDrawing = () => {
+    const playerStopDrawing = async () => {
+        
+        setHostTurn(true);
+
+        // while (hostScore < 17) {
+        //     await hostDrawCard();
+        // }
+
         if (playerScore > hostScore) {
             handleWin();
         } else if (playerScore === hostScore) {
@@ -170,8 +190,6 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
             handleLose();
         }
     }
-
-
 
     return (
         <>
