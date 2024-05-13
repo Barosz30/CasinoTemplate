@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useAppSelector } from '../../../lib/hooks'
+import { useAppSelector } from '../../lib/hooks'
 
 function CurrentMoney() {
 

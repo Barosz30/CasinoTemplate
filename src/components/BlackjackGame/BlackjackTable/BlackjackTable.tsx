@@ -1,8 +1,7 @@
 "use client";
 
+import Card from "@/components/Card/Card";
 import { useCallback, useEffect, useState } from "react";
-import Card from "../../Card/Card";
-
 
 interface BlackjackTableProps {
     handleWin: () => void;
@@ -110,9 +109,8 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
             hostDrawCard();
         }
     
-        // Check if host's score is greater than or equal to 17 to stop drawing cards
         if (hostScore >= 17 && hostTurn) {
-            setHostTurn(false); // Stop host's turn
+            setHostTurn(false);
         }
     
         if (hostScore > 21) {
