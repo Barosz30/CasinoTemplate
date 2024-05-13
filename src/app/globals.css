@@ -26,6 +26,68 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.red {
+  color: #c00;
+}
+
+.black {
+  color: #333;
+}
+
+.word {
+  font-size: 1.2em;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  padding: 6px 0 0 4px;
+}
+
+.card {
+  font-size: 128px;
+  display: inline-block;
+  border: none;
+  line-height: 0.8;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.linux span, .linux span span {
+  font-size: 80px;
+  line-height: 1.5 !important;
+}
+
+.windoze span, .windoze span span {
+  font-size: 108px;
+  line-height: 1.0 !important;
+}
+
+.windoze > span {
+  margin-right: 6px;
+}
+
+.count {
+  display: inline-block;
+  font-size: 1.2em;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  vertical-align: middle;
+  height: 64px;
+  padding: 0 0 10px 12px;
+}
+
+.menu-buttons {
+  display: flex;
+}
+
+.menu-buttons div {
+  @apply py-2 px-6 bg-red-300 border-solid border-4 border-blue-600 rounded-full m-10;
+  
+}
+
+.get-bet, .get-deck-count {
+  margin: 8px 0 0 4px !important;
+  width: 200px !important;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

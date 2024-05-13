@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Card from "../../Card/Card";
 
 
 interface BlackjackTableProps {
@@ -22,6 +23,8 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
 
     const ranks: Rank[] = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
     const suits: Suit[] = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
+
+    
 
     const generateDeck = () => {
         const newDeck: Card[] = [];
@@ -65,7 +68,6 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
             return updatedPlayerCards;
         });
 
-        // setPlayerScore(CountPoints(playerCards));
     };
     
     const hostDrawCard = () => {
@@ -87,7 +89,6 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
             return updatedHostCards;
         });
 
-        // setHostScore(CountPoints(hostCards));
     };
 
 
@@ -105,16 +106,23 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
     }, [playerCards, hostCards]);
 
     useEffect(() => {
-        const drawCardAndUpdateScore = async () => {
-            if (hostScore < 17 && hostTurn) {
-                await hostDrawCard(); 
-                await setHostScore(CountPoints(hostCards));
-            }
-        };
+        if (hostTurn && hostScore < 17) {
+            hostDrawCard();
+        }
     
-        drawCardAndUpdateScore();
-
-    }, [hostTurn === true, hostCards]);
+        // Check if host's score is greater than or equal to 17 to stop drawing cards
+        if (hostScore >= 17 && hostTurn) {
+            setHostTurn(false); // Stop host's turn
+        }
+    
+        if (hostScore > 21) {
+            console.log(hostCards);
+            handleWin();
+        }
+    
+        setHostScore(CountPoints(hostCards));
+    
+    }, [hostTurn, hostCards, hostScore]);
 
     const CountPoints = (hand: Card[]) => {
         let result = 0;
@@ -182,21 +190,32 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
         //     await hostDrawCard();
         // }
 
-        if (playerScore > hostScore) {
+
+        if (playerScore > hostScore && playerScore < 22) {
+            console.log(hostCards);
             handleWin();
         } else if (playerScore === hostScore) {
+            console.log(hostCards);
             handleDraw();
         } else {
+            console.log(hostCards);
             handleLose();
         }
     }
 
     return (
         <>
+            <div className="flex-column m-4">
+                {hostCards.map((card, index) => ( <Card key={index} suit={card.suit} rank={card.rank} />))}
+            </div>
             <div>{hostScore}</div>
+
+            <div className="flex-column m-4">
+                {playerCards.map((card, index) => ( <Card key={index} suit={card.suit} rank={card.rank} />))}
+            </div>
             <div>{playerScore}</div>
             {!isGameOver &&
-            <>
+            <div className="flex-column">
                 <button 
                     className="py-2 px-6 bg-cyan-400 border-solid border-4 border-blue-600 rounded-full m-10"
                     onClick={playerDrawCard}
@@ -209,7 +228,7 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
                 >
                     Enough
                 </button>
-            </>
+            </div>
             }
         </>
     );

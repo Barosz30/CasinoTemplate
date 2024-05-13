@@ -3,8 +3,8 @@
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { setPlayerMoney } from "@/lib/playerMoneySlice/slice";
 import { useState } from "react";
-import BlackjackTable from "./BlackjackTable/BlackjackTable";
 import BlackjackBet from "./BlackjackBet/BlackjackBet";
+import BlackjackTable from "./BlackjackTable/BlackjackTable";
 
 
 function BlackjackGame() {
@@ -53,6 +53,7 @@ function BlackjackGame() {
     const handleAgainButton = () => {
         setNewGame(true);
         setIsGameOver(false);
+        
 
     }
 
@@ -63,9 +64,9 @@ function BlackjackGame() {
                 <BlackjackBet inputValue={inputValue} handleInputChange={handleInputChange} handleSaveInput={handleSaveInput} />
             }
             {isGameOver && <div className="py-2 px-6 bg-red-300 border-solid border-4 border-blue-600 rounded-full m-10">{messageAfterGame}</div> }
+            {!newGame && <BlackjackTable handleDraw={handleDraw} handleWin={handleWin} handleLose={handleLose} isGameOver={isGameOver}/>}
 
-            {(!newGame || isGameOver) &&
-            <BlackjackTable handleWin={handleWin} handleLose={handleLose} handleDraw={handleDraw} isGameOver={isGameOver}/>}
+
             {isGameOver &&
                 <button className="py-2 px-6 bg-red-300 border-solid border-4 border-blue-600 rounded-full m-10" onClick={() => handleAgainButton()}>
                     Play again

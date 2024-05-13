@@ -12,8 +12,6 @@ interface BlackjackBetProps {
 function BlackjackBet({ inputValue, handleInputChange, handleSaveInput }: BlackjackBetProps) {
 
 
-
-
     return (
         <>
         <input
