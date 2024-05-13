@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react";
-import BlackjackGame from "../components/BlackjackGame/BlackjackGame";
 import StoreProvider from "../StoreProvider";
+import BlackjackGame from "@/components/BlackjackGame/BlackjackGame";
 
 export default function Blackjack() {
     const [isGameStarted, setIsGameStarted] = useState(false);
