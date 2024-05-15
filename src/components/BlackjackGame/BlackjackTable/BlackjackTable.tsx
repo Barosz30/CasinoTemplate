@@ -105,22 +105,19 @@ function BlackjackTable({ handleWin, handleLose, handleDraw, isGameOver }: Black
     }, [playerCards, hostCards]);
 
     useEffect(() => {
-        if (hostTurn && hostScore < 17) {
-            hostDrawCard();
-        }
+        const drawCardIfNeeded = async () => {
+            if (hostTurn && hostScore < 17) {
+                await hostDrawCard();
+            }
+        };
     
-        if (hostScore >= 17 && hostTurn) {
-            setHostTurn(false);
-        }
+        drawCardIfNeeded().then(() => {
+            if (hostScore >= 17) {
+                setHostTurn(false);
+            }
+        });
+    }, [hostTurn, hostScore]);
     
-        if (hostScore > 21) {
-            console.log(hostCards);
-            handleWin();
-        }
-    
-        setHostScore(CountPoints(hostCards));
-    
-    }, [hostTurn, hostCards, hostScore]);
 
     const CountPoints = (hand: Card[]) => {
         let result = 0;
